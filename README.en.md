@@ -2,100 +2,117 @@
 
 [Tiếng Việt](README.md) · **English**
 
-An Android app (plain Java, no third-party libraries) that gives you **8 home-screen widgets** for **RAM, internal storage (ROM),
-battery and device info**, refreshed in real time. No root, no Internet permission, no data collection.
-
-> Author: Vũ Đình Đạt · [@Vudinhdat02](https://github.com/Vudinhdat02)
+Home-screen widgets for Android that show RAM, internal storage, battery and device information in real time.
+Written in plain Java with no third-party dependencies. No root and no Internet permission required.
 
 ## Features
 
-- **8 widget styles**: rings, gauges, progress bars, a terminal look, a device-info card...
-- **Live updates** (about every 3 s) while the screen is on. When the screen is off nothing runs, so battery impact is minimal.
-- **In-app preview**: every widget is shown with your device's real numbers and has an *Add to home screen* button.
-- **Clean RAM button** (in the app and on the 2×4 widget): stops background apps and clears this app's own cache.
-- **Widget appearance**: adjust the background **transparency** (0-100%) and turn on a **Liquid Glass** effect - applies to every widget.
-- **Material You** colors, automatic **light/dark** theme, **English + Vietnamese**.
-- Requires **Android 12+** (API 31).
+- 8 widget styles in several sizes (2×1, 2×2, 4×2).
+- Refreshes about every 3 seconds while the screen is on and stops completely when it is off.
+- In-app preview of every widget using the device's live data.
+- Adjustable background transparency (0–100%) and a Liquid Glass effect for all widgets.
+- RAM cleanup from the app and from the 4×2 widget.
+- Material You colors, light/dark theme, English and Vietnamese.
+
+## Requirements
+
+Android 12 or later (API 31+).
 
 ## Widgets
 
-| Widget | Size | Shows |
+| Widget | Size | Content |
 |---|---|---|
-| Device info | 4×2 | Clock + date, RAM ring, storage bar, battery bar (mV / temperature) |
-| Terminal style | 4×2 | Device name, Android version, chip, battery, disk in a terminal look |
-| RAM usage | 2×1 | Usage ring on the left (same shape as the Storage widget) and RAM used |
-| Internal storage | 2×1 | Usage ring and free space |
-| Battery | 2×1 | Battery ring, level, temperature (bolt while charging) |
-| RAM details | 2×2 | Large gauge, usage %, total and available |
-| RAM & ROM 2×2 | 2×2 | Square: two % rings stacked (ROM on top, RAM below) with labels |
-| RAM & ROM 2×4 | 4×2 | Two progress bars with sizes + clean RAM button |
+| Device info | 4×2 | Clock, date, RAM, storage, battery (voltage, temperature) |
+| Terminal | 4×2 | Device name, Android version, chip, battery, storage |
+| RAM | 2×1 | RAM usage ratio and amount used |
+| Internal storage | 2×1 | Usage ratio and free space |
+| Battery | 2×1 | Level, temperature, charging state |
+| RAM details | 2×2 | Gauge, usage ratio, total and available |
+| RAM & ROM | 2×2 | Two usage rings for storage and RAM |
+| RAM & ROM | 4×2 | Two progress bars and a RAM cleanup button |
 
 <p>
   <img src="app/src/main/res/drawable-nodpi/preview_deviceinfo.png" width="380" alt="Device info">
-  <img src="app/src/main/res/drawable-nodpi/preview_terminal.png" width="380" alt="Terminal style">
+  <img src="app/src/main/res/drawable-nodpi/preview_terminal.png" width="380" alt="Terminal">
 </p>
 <p>
-  <img src="app/src/main/res/drawable-nodpi/preview_ramgauge.png" width="190" alt="RAM usage">
+  <img src="app/src/main/res/drawable-nodpi/preview_ramgauge.png" width="190" alt="RAM">
   <img src="app/src/main/res/drawable-nodpi/preview_storage.png" width="190" alt="Internal storage">
   <img src="app/src/main/res/drawable-nodpi/preview_battery.png" width="190" alt="Battery">
   <img src="app/src/main/res/drawable-nodpi/preview_ramcard.png" width="190" alt="RAM details">
 </p>
 
-(Illustrative renders; the real widgets use your system font.)
+## Installation
 
-## Install
+Download `app-release.apk` from [Releases](../../releases) and install it on the device. Launch the app once after installation to start the widget update service.
 
-1. Download the latest `app-release.apk` from **[Releases](../../releases)** (or build it yourself, see below).
-2. Open the APK on your phone and allow **Install unknown apps** for your browser/file manager if asked.
-3. **Open the app once** after installing so it can start the live updater for your widgets.
+Widgets can be added from the *Home screen widgets* section in the app or from the launcher's widget picker.
 
-## Usage
+## Notes
 
-- **Add a widget from the app (with preview):** open the app, scroll to *Home screen widgets*, look at the previews, tap **Add to home screen**.
-- **Add a widget from the launcher:** long-press an empty spot on the home screen → **Widgets** → **RAM & ROM** → pick one.
-- Tap any widget to open the details screen.
-- **Transparency / Liquid Glass:** in the app, use the *Widget appearance* card above the widget list. The previews update as you drag; home-screen widgets update when you release.
-  Launchers don't let widgets blur the wallpaper behind them, so the glass look is a gradient-and-highlight simulation rather than a real blur.
-- **Clean RAM:** tap the button in the app (or the round button on the 2×4 widget). Android manages RAM on its own, background apps can restart
-  immediately and other apps' caches can't be cleared without root, so the amount freed is often small - that's a system limit, not a bug.
-- **Keep widgets live and battery-friendly:** open the app once after each install/update and set the app's battery usage to **Unrestricted**
-  (Samsung: Settings → Battery → Background usage limits → remove the app from sleeping apps).
+- **Background updates:** some vendors (Xiaomi, Oppo, Samsung…) restrict background services. Setting the app's battery usage to *Unrestricted* keeps widgets updating reliably.
+- **Service notification:** Android requires a notification for foreground services. It uses the lowest importance: silent, with no status-bar icon.
+- **Liquid Glass:** launchers do not allow widgets to blur the wallpaper, so the effect is simulated with gradients and highlights.
+- **RAM cleanup:** Android manages memory itself and a non-root app can only stop other apps' background processes, so the amount freed may be small.
+- **Chip names:** chip codes are mapped to marketing names (Snapdragon, Exynos, Dimensity, Tensor) in `DeviceInfo.java`. Unlisted chips show the raw code.
 
-## FAQ
+## Permissions and privacy
 
-- **Widget doesn't update?** Open the app once and set battery usage to *Unrestricted*. Some vendors (Xiaomi, Oppo, Samsung...) aggressively stop background services.
-- **Why is there a small notification?** Android requires a foreground service to show one. It's minimum importance: silent, no status-bar icon.
-- **Odd chip name?** Chip codes are translated to marketing names via a table in `DeviceInfo.java` (Snapdragon, Exynos, Dimensity, Tensor). Unknown chips show the raw code - feel free to extend the table.
-- **Device name?** Taken from *Settings → About phone → Device name*.
-
-## Permissions & privacy
-
-| Permission | Why |
+| Permission | Purpose |
 |---|---|
-| `KILL_BACKGROUND_PROCESSES` | Stop background apps when you tap Clean RAM |
-| `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE` | Keep widgets live (only runs while the screen is on) |
-| `RECEIVE_BOOT_COMPLETED` | Restart live updates after reboot or app update |
-| `queries` (launcher / home) | List apps for cleaning without the broad package-visibility permission |
+| `KILL_BACKGROUND_PROCESSES` | Stop background processes during RAM cleanup |
+| `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE` | Real-time widget updates while the screen is on |
+| `RECEIVE_BOOT_COMPLETED` | Restart the service after reboot or app update |
+| `queries` (launcher / home) | List apps to stop without broad package visibility |
 
-There is **no Internet permission**; nothing leaves your phone.
+The app has no Internet permission. All data is read and processed on the device.
 
-## Build from source
+## Building from source
 
-Requires JDK 17+ and the Android SDK (platform 35).
+Requires JDK 17+ and the Android SDK (platform 35). Set the SDK path via `ANDROID_HOME` or `local.properties`.
 
 ```bash
-./gradlew assembleRelease        # Windows: gradlew.bat assembleRelease
+./gradlew assembleRelease
 ```
 
-Output: `app/build/outputs/apk/release/app-release.apk`. Point Gradle to the SDK via `ANDROID_HOME` or `local.properties` (`sdk.dir=...`, not committed).
+The APK is written to `app/build/outputs/apk/release/app-release.apk`.
 
-**Signing:** if `keystore.properties` + `release.jks` exist in the project root they are used (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`);
-else a `release.keystore` (restored by CI from a secret) is used with `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`;
-otherwise the debug key is used so the project still builds. The keystore is git-ignored - never commit it. APKs signed with different keys can't be installed over each other.
+### Signing
 
-**GitHub Actions:** `.github/workflows/build.yml` builds on every push to `main` / pull request (artifact `RAM-ROM-apk`) and publishes the APK to **Releases** when you push a tag like `v1.2`.
-To sign CI builds with your own key add the repository secret `KEYSTORE_BASE64` (`base64 -w0 release.jks`) together with `KEYSTORE_PASSWORD`, `KEY_ALIAS` (`memwidget`) and `KEY_PASSWORD` (values are in `keystore.properties`). Back up `release.jks` and `keystore.properties` somewhere safe.
+The `release` build uses the first signing key available:
+
+1. `keystore.properties` and `release.jks` in the project root (keys `storeFile`, `storePassword`, `keyAlias`, `keyPassword`).
+2. `release.keystore` restored by CI from a secret, with passwords from `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
+3. The debug key otherwise.
+
+Key files are excluded via `.gitignore`.
+
+### CI
+
+`.github/workflows/build.yml` builds the APK on every push to `main` and on pull requests. Pushing a `v*` tag publishes the APK to Releases.
+To sign CI builds, configure the `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS` and `KEY_PASSWORD` secrets.
+
+## Project structure
+
+```
+app/src/main/java/com/vdd/memwidget/
+  MainActivity.java        Main screen, RAM/ROM details, widget gallery
+  WidgetStyle.java         Background transparency and glass effect
+  WidgetKinds.java         Widget type and size definitions
+  WidgetViews.java         RemoteViews construction for each widget
+  WidgetUpdater.java       Pushes updates when data, size or style changes
+  MonitorService.java      Background updater, runs only while the screen is on
+  Gauges.java              Ring and arc rendering
+  MemStats.java, BatteryInfo.java, DeviceInfo.java, Snapshot.java   System metrics
+  MemCleaner.java          RAM cleanup
+  *WidgetProvider.java     One provider per widget
+app/src/main/res/          Layouts, colors, strings (values: English, values-vi: Vietnamese), previews
+```
 
 ## Contributing
 
-Issues and pull requests are welcome: new widget styles, more chip names, or translations (add `values-xx/strings.xml`).
+Issues and pull requests are welcome, especially new widget styles, additional chip names and translations (`values-xx/strings.xml`).
+
+## Author
+
+Vũ Đình Đạt · [@Vudinhdat02](https://github.com/Vudinhdat02)
